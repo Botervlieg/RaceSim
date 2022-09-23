@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    internal class Competition
+    public class Competition
     {
         public List<IParticipant> Participants { get; set; }
         public Queue<Track> Tracks { get; set; }
@@ -15,5 +15,15 @@ namespace Model
         public Track NextTrack() {
             return null;
         }
+
+
+        
+        public Competition()
+        {
+            Participants = new List<IParticipant>();    
+            Tracks = new Queue<Track>();
+        }
+
+
     }
 }
