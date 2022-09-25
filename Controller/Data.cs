@@ -10,7 +10,9 @@ namespace Controller
 {
     public static class Data 
     {
-        static Competition competitie { get; set; }
+        public static Competition competitie { get; set; }
+
+        public static Race CurrentRace; 
         
 
         public static void Initialize()
@@ -22,7 +24,7 @@ namespace Controller
 
         public static void AddParticipants()
         {
-            Driver driver1 = new Driver("piet", 0, new Car(5, 1, 120, false), TeamColors.Red);
+            Driver driver1 = new Driver("piet", 0, new Car(0, 0, 120, false), TeamColors.Red);
             Driver driver2 = new Driver("henk", 1, new Car(1, 2, 100, false), TeamColors.Blue);
             Driver driver3 = new Driver("jan", 0, new Car(3, 5, 110, true), TeamColors.Green);
             competitie.Participants.Add(driver1);
@@ -39,6 +41,17 @@ namespace Controller
             {SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Finish});
             competitie.Tracks.Enqueue(track1);
             competitie.Tracks.Enqueue(track2);
+        }
+
+        public static void NextRace()
+        {
+            Track track = competitie.NextTrack();
+
+            if(track is not null)
+            {
+                CurrentRace = new Race(track, competitie.Participants);
+            }
+
         }
 
 

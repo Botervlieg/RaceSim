@@ -20,7 +20,12 @@ namespace Model
             Right = right;
             DistanceRight = distanceRight;
         }
-        
+
+
+        public SectionData()
+        {
+
+        }
 
     }
 }
