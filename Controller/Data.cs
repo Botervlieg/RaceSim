@@ -10,9 +10,9 @@ namespace Controller
 {
     public static class Data 
     {
-        public static Competition competitie { get; set; }
+        public static Competition competitie= default!;
 
-        public static Race CurrentRace; 
+        public static Race CurrentRace = default!; 
         
 
         public static void Initialize()
@@ -34,10 +34,12 @@ namespace Controller
 
         public static void AddTracks()
         {
-            Track track1 = new Track("road", new SectionTypes[] 
-            {SectionTypes.StartGrid, SectionTypes.LeftCorner, SectionTypes.Straigth, SectionTypes.Finish});
+            Track track1 = new Track("track1", new SectionTypes[] 
+            {SectionTypes.StartGrid, SectionTypes.Straigth ,SectionTypes.RightCorner, SectionTypes.RightCorner,SectionTypes.LeftCorner,
+             SectionTypes.LeftCorner, SectionTypes.RightCorner, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.LeftCorner,
+             SectionTypes.Finish});
 
-            Track track2 = new Track("weg", new SectionTypes[]
+            Track track2 = new Track("track2", new SectionTypes[]
             {SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Finish});
             competitie.Tracks.Enqueue(track1);
             competitie.Tracks.Enqueue(track2);
@@ -45,7 +47,7 @@ namespace Controller
 
         public static void NextRace()
         {
-            Track track = competitie.NextTrack();
+            Track? track = competitie.NextTrack();
 
             if(track is not null)
             {
