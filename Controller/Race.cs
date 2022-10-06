@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +14,35 @@ namespace Controller
         public List<IParticipant> Participants;
         public DateTime StartTime;
         private Random _random;
+        
 
 
         private Dictionary<Section, SectionData> _positions = new Dictionary<Section, SectionData>();
 
+
+        public void setstartpositie(Track track, List<IParticipant> participants)
+        {
+            foreach (IParticipant participant in participants)
+            {
+                foreach (Section section in track.Sections)
+                {
+                    if (section.SectionType == SectionTypes.StartGrid)
+                    {
+                        SectionData data = getSectionData(section);
+                        if (data.Left is null)
+                        {
+                            _positions[section].Left = participant;
+                            break;
+                        }
+                        else if (data.Right is null)
+                        {
+                            _positions[section].Right = participant;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
         
 
@@ -38,11 +64,7 @@ namespace Controller
             {
                 i.Equipment.Performance = _random.Next(1,5);
                 i.Equipment.Quality = _random.Next(1, 5);
-                
             }
-
-            
-
         }
 
 
@@ -51,6 +73,7 @@ namespace Controller
             Track = track;
             Participants = participants;
             _random = new Random(DateTime.Now.Millisecond);
+            setstartpositie(track, participants);
         }
 
 

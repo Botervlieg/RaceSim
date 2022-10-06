@@ -142,7 +142,7 @@ namespace RaceSim
                         X = X + 5;
                     } else
                     {
-                        X = X - 10;
+                        X = X - 5;
                     }
                 }
 
@@ -157,9 +157,9 @@ namespace RaceSim
                             X = X + 5;
                         } else
                         {
-                            X = X - 10;
+                            X = X - 5;
                         }
-                    } else if(richting == 2 || richting == 4)
+                    } else if(richting == 2 || richting == 0)
                     {
                         drawSection(_straigthVertical, X, Y);
                         if(richting == 2)
@@ -168,7 +168,7 @@ namespace RaceSim
                         }
                         else
                         {
-                            Y = Y - 10;
+                            Y = Y - 5;
                         }
                     }
                 }
@@ -184,7 +184,7 @@ namespace RaceSim
                         }
                         else
                         {
-                            X = X - 10;
+                            X = X - 5;
                         }
                     }
                     else if (richting == 2 || richting == 4)
@@ -196,7 +196,7 @@ namespace RaceSim
                         }
                         else
                         {
-                            Y = Y - 10;
+                            Y = Y - 5;
                         }
                     }
                 }

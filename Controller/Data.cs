@@ -10,7 +10,7 @@ namespace Controller
 {
     public static class Data 
     {
-        public static Competition competitie= default!;
+        public static Competition competitie = default!;
 
         public static Race CurrentRace = default!; 
         
@@ -35,12 +35,14 @@ namespace Controller
         public static void AddTracks()
         {
             Track track1 = new Track("track1", new SectionTypes[] 
-            {SectionTypes.StartGrid, SectionTypes.Straigth ,SectionTypes.RightCorner, SectionTypes.RightCorner,SectionTypes.LeftCorner,
-             SectionTypes.LeftCorner, SectionTypes.RightCorner, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.LeftCorner,
-             SectionTypes.Finish});
+            {SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.Straigth ,SectionTypes.RightCorner, SectionTypes.RightCorner,SectionTypes.LeftCorner,
+             SectionTypes.LeftCorner, SectionTypes.Straigth, SectionTypes.LeftCorner, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.LeftCorner,
+             SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.Straigth,
+             SectionTypes.LeftCorner,  SectionTypes.Straigth, SectionTypes.LeftCorner, SectionTypes.Finish});
 
             Track track2 = new Track("track2", new SectionTypes[]
-            {SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.LeftCorner, SectionTypes.Finish});
+            {SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.RightCorner, SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.Straigth,
+            SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.Finish});
             competitie.Tracks.Enqueue(track1);
             competitie.Tracks.Enqueue(track2);
         }
