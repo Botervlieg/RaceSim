@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO.IsolatedStorage;
+using Controller;
 using Model;
+
 
 namespace RaceSim
 {
@@ -12,73 +9,73 @@ namespace RaceSim
     {
 
         #region graphics
-/*
- * de verschillende sections
- * Straigth,
- * LeftCorner,
- * RightCorner,
- * StartGrid,
- * Finish
- */
+        /*
+         * de verschillende sections
+         * Straigth,
+         * LeftCorner,
+         * RightCorner,
+         * StartGrid,
+         * Finish
+         */
 
         private static string[] _finishHorizontal = {"-----",
-                                                     "     ",
-                                                     "  !  ", 
-                                                     "     ", 
+                                                     "  1  ",
+                                                     "  !  ",
+                                                     "  2  ",
                                                      "-----"};
 
         private static string[] _finishVertical = {"|   |",
-                                                   "|   |", 
-                                                   "| ! |", 
+                                                   "|   |",
+                                                   "|1!2|",
                                                    "|   |",
                                                    "|   |"};
 
         private static string[] _startGridHorizontal = {"-----",
-                                                        "     ",
+                                                        "  1  ",
                                                         "  *  ",
-                                                        "     ",
+                                                        "  2  ",
                                                         "-----"};
 
         private static string[] _startGridVertical = {"|   |",
                                                       "|   |",
-                                                      "| * |",
+                                                      "|1*2|",
                                                       "|   |",
                                                       "|   |"};
 
         private static string[] _straigthHorizontal = {"-----",
-                                                       "     ", 
-                                                       "     ", 
-                                                       "     ", 
+                                                       "  1  ",
+                                                       "     ",
+                                                       "  2  ",
                                                        "-----"};
 
-        private static string[] _straigthVertical = {"|   |", 
-                                                     "|   |",  
-                                                     "|   |",   
-                                                     "|   |", 
+        private static string[] _straigthVertical = {"|   |",
+                                                     "|   |",
+                                                     "|1 2|",
+                                                     "|   |",
                                                      "|   |"};
 
         private static string[] _cornerdownleft = {"----\\",
+                                                   "   1|",
                                                    "    |",
-                                                   "    |",
-                                                   "    |",
+                                                   " 2  |",
                                                    "\\   |" };
 
         private static string[] _cornerupright = {"|   \\",
+                                                   "|  1 ",
                                                    "|    ",
-                                                   "|    ",
-                                                   "|    ",
+                                                   "|2   ",
                                                    "\\----"};
 
         private static string[] _cornerupleft = {"/   |",
+                                                "2   |",
                                                 "    |",
-                                                "    |",
-                                                "    |",
+                                                "   1|",
                                                 "----/"};
 
         private static string[] _cornerdownright ={"/----",
+                                                  "|1   ",
                                                   "|    ",
-                                                  "|    ",
-                                                  "|    ",
+                                                  "|  2 ",
                                                   "|   /" };
 
 
@@ -97,15 +94,59 @@ namespace RaceSim
 
         static int richting = 1;
         ///noord = 0
-        ///oost = 1 
-        ///zuid = 2 
+        ///oost = 1
+        ///zuid = 2
         ///west = 3
 
 
-
-        public static void drawSection(String[] type, int x , int y) 
+        public static string[] DrawParticipant(IParticipant participant, string[] section)
         {
-            foreach(string row in type)
+            string[] sectiontemp = new string[section.Length];
+
+            for (int i = 0; i < section.Length; i++)
+            {
+                sectiontemp[i] = section[i];
+            }
+            for (int i = 0; i < section.Length; i++)
+            {
+                if (section[i].Contains("1"))
+                {
+                    sectiontemp[i] = section[i].Replace('1', participant.Name[0]);
+                    return sectiontemp;
+                } else 
+                if (section[i].Contains("2"))
+                {
+                    sectiontemp[i] = section[i].Replace('2', participant.Name[0]);
+                    return sectiontemp;
+                }
+            }
+            return sectiontemp;
+        }
+
+
+
+
+
+        public static void drawSection(String[] type, int x, int y, Section section)
+        {
+            SectionData data = Data.CurrentRace.getSectionData(section);
+            if (data.Left is not null)
+            {
+                type = DrawParticipant(data.Left, type);
+            }  
+            if (data.Right is not null) 
+            {
+                type = DrawParticipant(data.Right, type);
+            } else
+            {
+                for (int i = 0; i < type.Length; i++)
+                {
+                   type[i] = type[i].Replace('1', ' ');
+                   type[i] = type[i].Replace('2', ' ');
+                }
+                
+            }
+            foreach (string row in type)
             {
                 foreach (char c in row)
                 {
@@ -116,8 +157,6 @@ namespace RaceSim
                 y++;
                 x = x - 5;
             }
-
-
         }
 
 
@@ -127,42 +166,46 @@ namespace RaceSim
         public static void drawTrack(Track track)
         {
             Console.Clear();
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
             int X = 50; //Console.CursorLeft;
             int Y = 50; //Console.CursorTop;
 
 
-           foreach(Section section in track.Sections)
-            {   
-                if(section.SectionType == SectionTypes.StartGrid)
+
+            foreach (Section section in track.Sections)
+            {
+                if (section.SectionType == SectionTypes.StartGrid)
                 {
-                    drawSection(_startGridHorizontal, X, Y);
-                    if(richting == 1)
+                    drawSection(_startGridHorizontal, X, Y, section);
+                    if (richting == 1)
                     {
                         X = X + 5;
-                    } else
+                    }
+                    else
                     {
                         X = X - 5;
                     }
                 }
 
 
-                if(section.SectionType == SectionTypes.Straigth)
+                if (section.SectionType == SectionTypes.Straigth)
                 {
-                    if(richting == 1 || richting == 3)
+                    if (richting == 1 || richting == 3)
                     {
-                        drawSection(_straigthHorizontal, X, Y);
-                        if(richting == 1)
+                        drawSection(_straigthHorizontal, X, Y, section);
+                        if (richting == 1)
                         {
                             X = X + 5;
-                        } else
+                        }
+                        else
                         {
                             X = X - 5;
                         }
-                    } else if(richting == 2 || richting == 0)
+                    }
+                    else if (richting == 2 || richting == 0)
                     {
-                        drawSection(_straigthVertical, X, Y);
-                        if(richting == 2)
+                        drawSection(_straigthVertical, X, Y, section);
+                        if (richting == 2)
                         {
                             Y = Y + 5;
                         }
@@ -177,7 +220,7 @@ namespace RaceSim
                 {
                     if (richting == 1 || richting == 3)
                     {
-                        drawSection(_finishHorizontal, X, Y);
+                        drawSection(_finishHorizontal, X, Y, section);
                         if (richting == 1)
                         {
                             X = X + 5;
@@ -189,7 +232,7 @@ namespace RaceSim
                     }
                     else if (richting == 2 || richting == 4)
                     {
-                        drawSection(_finishVertical, X, Y);
+                        drawSection(_finishVertical, X, Y, section);
                         if (richting == 2)
                         {
                             Y = Y + 5;
@@ -201,83 +244,63 @@ namespace RaceSim
                     }
                 }
 
-                if(section.SectionType == SectionTypes.LeftCorner)
+                if (section.SectionType == SectionTypes.LeftCorner)
                 {
-                    if(richting == 0)
+                    if (richting == 0)
                     {
-                        drawSection(_cornerdownleft, X, Y);
+                        drawSection(_cornerdownleft, X, Y, section);
                         richting = 3;
                         X = X - 5;
-                    } else if(richting == 1)
+                    }
+                    else if (richting == 1)
                     {
-                        drawSection(_cornerupleft, X, Y);
+                        drawSection(_cornerupleft, X, Y, section);
                         richting = 0;
                         Y = Y + -5;
-                    } else if(richting == 2)
+                    }
+                    else if (richting == 2)
                     {
-                        drawSection(_cornerupright, X, Y);
-                            richting = 1;
-                            X = X + 5;
-                    } else if(richting == 3)
+                        drawSection(_cornerupright, X, Y, section);
+                        richting = 1;
+                        X = X + 5;
+                    }
+                    else if (richting == 3)
                     {
-                        drawSection(_cornerdownright, X, Y);
+                        drawSection(_cornerdownright, X, Y, section);
                         richting = 2;
                         Y = Y + 5;
                     }
                 }
 
-                if(section.SectionType == SectionTypes.RightCorner)
+                if (section.SectionType == SectionTypes.RightCorner)
                 {
-                    if(richting == 0)
+                    if (richting == 0)
                     {
-                        drawSection(_cornerdownright, X, Y);
+                        drawSection(_cornerdownright, X, Y, section);
                         X = X + 5;
                         richting = 1;
-                    } else if(richting == 1)
+                    }
+                    else if (richting == 1)
                     {
-                        drawSection(_cornerdownleft, X, Y);
+                        drawSection(_cornerdownleft, X, Y, section);
                         Y = Y + 5;
                         richting = 2;
-                    } else if(richting == 2)
+                    }
+                    else if (richting == 2)
                     {
-                        drawSection(_cornerupleft, X, Y);
+                        drawSection(_cornerupleft, X, Y, section);
                         X = X - 5;
                         richting = 3;
-                    } else if(richting == 3)
+                    }
+                    else if (richting == 3)
                     {
-                        drawSection(_cornerupright, X, Y);
+                        drawSection(_cornerupright, X, Y, section);
                         Y = Y - 5;
                         richting = 0;
                     }
-
-
                 }
-
-
-
-
-
-
-
-
-
             }
-
-
-
-
-
-
-
-
-
         }
-            
-
-            
     }
-
-
-
 }
 

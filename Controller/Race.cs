@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Model;
+using System.Timers;
 
 namespace Controller
 {
@@ -14,6 +15,7 @@ namespace Controller
         public List<IParticipant> Participants;
         public DateTime StartTime;
         private Random _random;
+        private System.Timers.Timer timer = new System.Timers.Timer();
         
 
 
@@ -44,6 +46,7 @@ namespace Controller
             }
         }
 
+
         
 
         public SectionData getSectionData(Section section)
@@ -60,7 +63,7 @@ namespace Controller
 
         public void RandomizeEquipment()
         {
-            foreach (Driver i in Data.competitie.Participants)
+            foreach (Driver i in Data.competition.Participants)
             {
                 i.Equipment.Performance = _random.Next(1,5);
                 i.Equipment.Quality = _random.Next(1, 5);
@@ -74,6 +77,9 @@ namespace Controller
             Participants = participants;
             _random = new Random(DateTime.Now.Millisecond);
             setstartpositie(track, participants);
+            timer.Interval = 500;
+            timer.Enabled = true;
+            timer.Start();
         }
 
 
