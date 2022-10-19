@@ -5,6 +5,7 @@ using Model;
 
 namespace RaceSim
 {
+    
     public static class visualisatie
     {
 
@@ -97,6 +98,27 @@ namespace RaceSim
         ///oost = 1
         ///zuid = 2
         ///west = 3
+
+        
+
+        private static void init()
+        {
+            Data.CurrentRace.DriversChanged += OnDriversChanged();
+        }
+
+        
+
+
+
+        private static void OnDriversChanged(object? o, DriversChangedEventArgs args)
+        {
+            drawTrack(args.Track);
+        }
+        
+        
+        
+
+
 
 
         public static string[] DrawParticipant(IParticipant participant, string[] section)

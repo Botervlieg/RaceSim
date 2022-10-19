@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Model;
+using RaceSim;
 
 namespace Controller 
 {
@@ -29,11 +31,11 @@ namespace Controller
             Driver driver2 = new Driver("henk", 1, new Car(1, 2, 100, false), TeamColors.Blue);
             Driver driver3 = new Driver("jan", 0, new Car(3, 5, 110, true), TeamColors.Green);
             Driver driver4 = new Driver("willem ", 1, new Car(2, 4, 115, false), TeamColors.Yellow);
+            
             competition.Participants.Add(driver1);
             competition.Participants.Add(driver2);
             competition.Participants.Add(driver3);
             competition.Participants.Add(driver4);
-            
         }
 
         public static void AddTracks()
@@ -59,12 +61,7 @@ namespace Controller
             {
                 CurrentRace = new Race(track, competition.Participants);
             }
-
+            
         }
-
-
-
-
-
     }
 }

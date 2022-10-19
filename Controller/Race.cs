@@ -15,7 +15,7 @@ namespace Controller
         public List<IParticipant> Participants;
         public DateTime StartTime;
         private Random _random;
-        private System.Timers.Timer timer = new System.Timers.Timer();
+        private System.Timers.Timer timer;
         
 
 
@@ -63,12 +63,30 @@ namespace Controller
 
         public void RandomizeEquipment()
         {
-            foreach (Driver i in Data.competition.Participants)
+            foreach (Driver driver in Data.competition.Participants)
             {
-                i.Equipment.Performance = _random.Next(1,5);
-                i.Equipment.Quality = _random.Next(1, 5);
+                driver.Equipment.Performance = _random.Next(1,5);
+                driver.Equipment.Quality = _random.Next(1, 5);
             }
         }
+
+        public void start()
+        {
+            {
+                timer.Enabled = true;
+            }
+        }
+
+        public event EventHandler DriversChanged;
+
+        
+
+        private void OnTimedEvent(object o, ElapsedEventArgs e)
+        {
+            
+        }
+        
+        
 
 
         public Race(Track track, List<IParticipant> participants)
@@ -77,11 +95,13 @@ namespace Controller
             Participants = participants;
             _random = new Random(DateTime.Now.Millisecond);
             setstartpositie(track, participants);
-            timer.Interval = 500;
-            timer.Enabled = true;
-            timer.Start();
+            timer = new System.Timers.Timer(500);
+            timer.Elapsed += OnTimedEvent;
+            RandomizeEquipment();
+            
+            
         }
 
-
+        
     }
 }
