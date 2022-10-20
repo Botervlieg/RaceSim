@@ -117,7 +117,17 @@ namespace Controller
                                 prevsectiondata.Left.Location = prevsectiondata.Left.Location - 50;
                                 _positions[currentSectionNode.Value].Left = prevsectiondata.Left;
                                 _positions[prevSectionNode.Value].Left = null;
+                            if (currentSectionNode.Value.SectionType == SectionTypes.Finish)
+                            {
+                                _positions[currentSectionNode.Value].Left.Ronde++;
+                                if (_positions[currentSectionNode.Value].Left.Ronde == 3)
+                                {
+                                    _positions[currentSectionNode.Value].Left = null;
+                                    CheckIfRaceDone();
+                                }
                             }
+
+                        }
                         }
                         if (prevsectiondata.Right is not null && currentsectiondata.Left is null)
                         {
@@ -127,7 +137,16 @@ namespace Controller
                                 prevsectiondata.Right.Location = prevsectiondata.Right.Location - 50;
                                 _positions[currentSectionNode.Value].Left = prevsectiondata.Right;
                                 _positions[prevSectionNode.Value].Right = null;
+                            if (currentSectionNode.Value.SectionType == SectionTypes.Finish)
+                            {
+                                _positions[currentSectionNode.Value].Left.Ronde++;
+                                if (_positions[currentSectionNode.Value].Left.Ronde == 3)
+                                {
+                                    _positions[currentSectionNode.Value].Left = null;
+                                    CheckIfRaceDone();
+                                }
                             }
+                        }
                         }
                     }
 
@@ -141,7 +160,16 @@ namespace Controller
                                 prevsectiondata.Left.Location = prevsectiondata.Left.Location - 50;
                                 _positions[currentSectionNode.Value].Right = prevsectiondata.Left;
                                 _positions[prevSectionNode.Value].Left = null;
+                            if (currentSectionNode.Value.SectionType == SectionTypes.Finish)
+                            {
+                                _positions[currentSectionNode.Value].Right.Ronde++;
+                                if (_positions[currentSectionNode.Value].Right.Ronde == 3)
+                                {
+                                    _positions[currentSectionNode.Value].Right = null;
+                                    CheckIfRaceDone();
+                                }
                             }
+                        }
                         }
                         else if (prevsectiondata.Right is not null && currentsectiondata.Right is null)
                         {
@@ -151,14 +179,44 @@ namespace Controller
                                 prevsectiondata.Right.Location = prevsectiondata.Right.Location - 50;
                                 _positions[currentSectionNode.Value].Right = prevsectiondata.Right;
                                 _positions[prevSectionNode.Value].Right = null;
+                            if (currentSectionNode.Value.SectionType == SectionTypes.Finish)
+                            {
+                                _positions[currentSectionNode.Value].Right.Ronde++;
+                                if (_positions[currentSectionNode.Value].Right.Ronde == 3)
+                                {
+                                    _positions[currentSectionNode.Value].Right = null;
+                                    CheckIfRaceDone();
+                                }
                             }
+                        }
                         }
                     }
                 currentSectionNode = currentSectionNode.Previous;
             }
         }
-    
 
+
+
+        public void CheckIfRaceDone()
+        {
+            {
+                int finished = 0;
+                foreach (Driver driver in Data.competition.Participants)
+                {
+                    if (driver.Ronde == 3)
+                    {
+                        finished++;
+                    }
+                }
+                if (finished == Data.competition.Participants.Count)
+                {
+                    timer.Enabled = false;
+                }
+            }
+        }
+
+
+        
     
 
 

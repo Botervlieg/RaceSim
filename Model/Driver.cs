@@ -13,7 +13,8 @@ namespace Model
         public IEquipment Equipment { get; set; }
         public TeamColors TeamColor { get; set; }
         public int Location { get; set; }
-        
+        public int Ronde { get; set; }
+
 
 
 
@@ -24,6 +25,7 @@ namespace Model
             Equipment = equipment;
             TeamColor = teamColor;
             Location = 0;
+            Ronde = 0;
 
 
 
