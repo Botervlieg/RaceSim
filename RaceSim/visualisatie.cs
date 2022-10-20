@@ -93,24 +93,24 @@ namespace RaceSim
 
 
 
-        static int richting = 1;
+        static int richting;
         ///noord = 0
         ///oost = 1
         ///zuid = 2
         ///west = 3
 
-        
 
-        private static void init()
+        public static void Initialize()
         {
-            Data.CurrentRace.DriversChanged += OnDriversChanged();
+            Data.CurrentRace.DriversChanged += OnDriversChanged;
+            richting = 1;
         }
 
         
 
 
 
-        private static void OnDriversChanged(object? o, DriversChangedEventArgs args)
+        private static void OnDriversChanged(object? o, Model.DriversChangedEventArgs args)
         {
             drawTrack(args.Track);
         }
@@ -151,24 +151,30 @@ namespace RaceSim
 
         public static void drawSection(String[] type, int x, int y, Section section)
         {
+            string[] sectiontemp = new string[type.Length];
+            for (int i = 0; i < type.Length; i++)
+            {
+                sectiontemp[i] = type[i];
+            }
+
             SectionData data = Data.CurrentRace.getSectionData(section);
             if (data.Left is not null)
             {
-                type = DrawParticipant(data.Left, type);
+                sectiontemp = DrawParticipant(data.Left, sectiontemp);
             }  
             if (data.Right is not null) 
             {
-                type = DrawParticipant(data.Right, type);
-            } else
-            {
+                sectiontemp = DrawParticipant(data.Right, sectiontemp);
+            } 
+            
                 for (int i = 0; i < type.Length; i++)
                 {
-                   type[i] = type[i].Replace('1', ' ');
-                   type[i] = type[i].Replace('2', ' ');
+                   sectiontemp[i] = sectiontemp[i].Replace('1', ' ');
+                   sectiontemp[i] = sectiontemp[i].Replace('2', ' ');
                 }
                 
-            }
-            foreach (string row in type)
+            
+            foreach (string row in sectiontemp)
             {
                 foreach (char c in row)
                 {
@@ -188,10 +194,9 @@ namespace RaceSim
         public static void drawTrack(Track track)
         {
             Console.Clear();
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            //Console.BackgroundColor = ConsoleColor.DarkGreen;
             int X = 50; //Console.CursorLeft;
             int Y = 50; //Console.CursorTop;
-
 
 
             foreach (Section section in track.Sections)
