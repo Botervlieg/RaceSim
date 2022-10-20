@@ -65,8 +65,9 @@ namespace Controller
         {
             foreach (Driver driver in Data.competition.Participants)
             {
-                driver.Equipment.Performance = _random.Next(1, 5);
-                driver.Equipment.Quality = _random.Next(1, 5);
+                driver.Equipment.Performance = _random.Next(1, 6);
+                driver.Equipment.Quality = _random.Next(1, 6);
+                driver.Equipment.Performance = _random.Next(5, 11);
             }
         }
 
@@ -214,6 +215,14 @@ namespace Controller
                 }
             }
         }
+
+
+
+        public void cleanup()
+        {
+            DriversChanged = null;
+        }
+    
 
 
         

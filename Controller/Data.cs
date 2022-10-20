@@ -54,6 +54,10 @@ namespace Controller
 
         public static void NextRace()
         {
+            if(CurrentRace is not null)
+            {
+                CurrentRace.cleanup();
+            }
             Track? track = competition.NextTrack();
 
             if(track is not null)
