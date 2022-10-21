@@ -102,23 +102,21 @@ namespace RaceSim
 
         public static void Initialize()
         {
+            Console.Clear();
             Data.CurrentRace.DriversChanged += OnDriversChanged;
-            richting = 1;
+            drawTrack(Data.CurrentRace.Track);
         }
 
-        
-
-
+        public static void OnNextRaceEvent(object sender, NextRaceEventArgs e)
+        {
+            Initialize();
+        }
 
         private static void OnDriversChanged(object? o, Model.DriversChangedEventArgs args)
         {
             drawTrack(args.Track);
         }
         
-        
-        
-
-
 
 
         public static string[] DrawParticipant(IParticipant participant, string[] section)
@@ -193,10 +191,11 @@ namespace RaceSim
 
         public static void drawTrack(Track track)
         {
-            Console.Clear();
-            //Console.BackgroundColor = ConsoleColor.DarkGreen;
+            //Console.Clear();
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
             int X = 50; //Console.CursorLeft;
             int Y = 50; //Console.CursorTop;
+            richting = 1;
 
 
             foreach (Section section in track.Sections)

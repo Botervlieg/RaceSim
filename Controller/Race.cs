@@ -71,14 +71,21 @@ namespace Controller
             }
         }
 
-        public void start()
+        public void startRace()
         {
-            {
-                timer.Enabled = true;
-            }
+            timer.Start();
+        }
+
+        public void stopRace()
+        {
+            timer.Stop();
+            Data.NextRace();
+            
         }
 
         public event EventHandler<DriversChangedEventArgs> DriversChanged;
+
+        public EventHandler RaceFinished;
 
 
 
@@ -87,10 +94,13 @@ namespace Controller
         {
             Drive();
             DriversChanged.Invoke(this, new DriversChangedEventArgs() { Track = this.Track });
+            if (CheckIfRaceDone()){
+                RaceFinished?.Invoke(this, new EventArgs());
+            }
         }
 
 
-
+        
         public void Drive()
         {
             LinkedListNode<Section>? currentSectionNode = Track.Sections.Last;
@@ -124,7 +134,7 @@ namespace Controller
                                 if (_positions[currentSectionNode.Value].Left.Ronde == 3)
                                 {
                                     _positions[currentSectionNode.Value].Left = null;
-                                    CheckIfRaceDone();
+                                    //Finish();
                                 }
                             }
 
@@ -144,7 +154,7 @@ namespace Controller
                                 if (_positions[currentSectionNode.Value].Left.Ronde == 3)
                                 {
                                     _positions[currentSectionNode.Value].Left = null;
-                                    CheckIfRaceDone();
+                                    //Finish();
                                 }
                             }
                         }
@@ -167,7 +177,7 @@ namespace Controller
                                 if (_positions[currentSectionNode.Value].Right.Ronde == 3)
                                 {
                                     _positions[currentSectionNode.Value].Right = null;
-                                    CheckIfRaceDone();
+                                    //Finish();
                                 }
                             }
                         }
@@ -186,7 +196,7 @@ namespace Controller
                                 if (_positions[currentSectionNode.Value].Right.Ronde == 3)
                                 {
                                     _positions[currentSectionNode.Value].Right = null;
-                                    CheckIfRaceDone();
+                                    //Finish();
                                 }
                             }
                         }
@@ -198,7 +208,7 @@ namespace Controller
 
 
 
-        public void CheckIfRaceDone()
+        public void Finish()
         {
             {
                 int finished = 0;
@@ -209,18 +219,39 @@ namespace Controller
                         finished++;
                     }
                 }
-                if (finished == Data.competition.Participants.Count)
+                if (CheckIfRaceDone())
                 {
-                    timer.Enabled = false;
+                    stopRace();
                 }
             }
         }
 
+        public bool CheckIfRaceDone()
+        {
+            int finished = 0;
+            foreach (Driver driver in Data.competition.Participants)
+            {
+                if(driver.Ronde == 3)
+                {
+                    finished++;
+                }
+            }
+            if (finished == Data.competition.Participants.Count)
+            {
+                foreach (Driver driver in Data.competition.Participants)
+                {
+                    driver.Ronde = 0;
+                }
+                return true;
+            }
+            return false;
+        }
 
 
         public void cleanup()
         {
             DriversChanged = null;
+            RaceFinished = null;
         }
     
 
@@ -244,5 +275,10 @@ namespace Controller
         }
 
         
+    }
+    public class NextRaceEventArgs : EventArgs
+    {
+        public Race Race { get; set; }
+
     }
 }

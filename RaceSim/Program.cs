@@ -4,32 +4,26 @@ using RaceSim;
 using System.Reflection;
 
 Data.Initialize();
+Data.NextRaceEventHandler += visualisatie.OnNextRaceEvent;
 Data.NextRace();
-visualisatie.Initialize();
-Data.CurrentRace.start();
+
+
+//visualisatie.drawTrack(Data.CurrentRace.Track);
+//Data.CurrentRace.startRace();
+
+
 
 
 
 //debuggen zonder timer
-
-/*visualisatie.drawTrack(Data.CurrentRace.Track);
-Data.CurrentRace.Drive();
-visualisatie.drawTrack(Data.CurrentRace.Track);
-Data.CurrentRace.Drive();
-visualisatie.drawTrack(Data.CurrentRace.Track);
-Data.CurrentRace.Drive();
-visualisatie.drawTrack(Data.CurrentRace.Track);
-Data.CurrentRace.Drive();
-visualisatie.drawTrack(Data.CurrentRace.Track);
-Data.CurrentRace.Drive();
-visualisatie.drawTrack(Data.CurrentRace.Track);
-Data.CurrentRace.Drive();
-visualisatie.drawTrack(Data.CurrentRace.Track);
-Data.CurrentRace.Drive();
-visualisatie.drawTrack(Data.CurrentRace.Track);
-Data.CurrentRace.Drive();
-visualisatie.drawTrack(Data.CurrentRace.Track);
+/*
+while (true)
+{
+    visualisatie.drawTrack(Data.CurrentRace.Track);
+    Data.CurrentRace.Drive();
+}
 */
+
 
 
 

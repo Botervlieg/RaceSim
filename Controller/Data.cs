@@ -11,11 +11,14 @@ namespace Controller
 {
     public static class Data 
     {
-        public static Competition competition = default!;
+        public static Competition competition;
 
-        public static Race CurrentRace = default!; 
-        
-        
+        public static Race CurrentRace;
+
+
+        public static event EventHandler<NextRaceEventArgs> NextRaceEventHandler;
+
+
 
         public static void Initialize()
         {
@@ -47,24 +50,43 @@ namespace Controller
 
             Track track2 = new Track("track2", new SectionTypes[]
             {SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.Finish, SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.Straigth,
-            SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.RightCorner});
+             SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.Straigth,
+             SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.RightCorner});
+
+            Track track3 = new Track("track3", new SectionTypes[] 
+            {SectionTypes.StartGrid, SectionTypes.StartGrid, SectionTypes.Finish, SectionTypes.RightCorner, SectionTypes.RightCorner, SectionTypes.Straigth,
+             SectionTypes.Straigth, SectionTypes.Straigth, SectionTypes.RightCorner, SectionTypes.RightCorner});
+
+
+
             competition.Tracks.Enqueue(track1);
             competition.Tracks.Enqueue(track2);
+            competition.Tracks.Enqueue(track3);
         }
+        
+
 
         public static void NextRace()
         {
-            if(CurrentRace is not null)
-            {
-                CurrentRace.cleanup();
-            }
+            if (CurrentRace is not null) { 
+            CurrentRace.cleanup();
+        }
             Track? track = competition.NextTrack();
 
             if(track is not null)
             {
                 CurrentRace = new Race(track, competition.Participants);
-            }
-            
+                CurrentRace.RaceFinished += OnRaceFinished;
+                NextRaceEventHandler?.Invoke(null, new NextRaceEventArgs() { Race = CurrentRace });
+                CurrentRace.startRace();
+            } 
         }
+
+        public static void OnRaceFinished(object o, EventArgs e)
+        {
+            NextRace();
+        }
+
+        
     }
 }
