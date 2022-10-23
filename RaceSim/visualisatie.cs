@@ -109,6 +109,7 @@ namespace RaceSim
 
         public static void OnNextRaceEvent(object sender, NextRaceEventArgs e)
         {
+            drawTrack(Data.CurrentRace.Track);
             Initialize();
         }
 
@@ -132,11 +133,19 @@ namespace RaceSim
                 if (section[i].Contains("1"))
                 {
                     sectiontemp[i] = section[i].Replace('1', participant.Name[0]);
+                    if (participant.Equipment.IsBroken)
+                    {
+                        sectiontemp[i] = sectiontemp[i].Replace(participant.Name[0], '#');
+                    }
                     return sectiontemp;
                 } else 
                 if (section[i].Contains("2"))
                 {
                     sectiontemp[i] = section[i].Replace('2', participant.Name[0]);
+                    if (participant.Equipment.IsBroken)
+                    {
+                        sectiontemp[i] = sectiontemp[i].Replace(participant.Name[0], '#');
+                    }
                     return sectiontemp;
                 }
             }
@@ -192,7 +201,7 @@ namespace RaceSim
         public static void drawTrack(Track track)
         {
             //Console.Clear();
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            
             int X = 50; //Console.CursorLeft;
             int Y = 50; //Console.CursorTop;
             richting = 1;

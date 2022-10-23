@@ -29,10 +29,10 @@ namespace Controller
 
         public static void AddParticipants()
         {
-            Driver driver1 = new Driver("piet", 0, new Car(5, 5, 10, false), TeamColors.Red);
-            Driver driver2 = new Driver("henk", 1, new Car(4, 2, 9, false), TeamColors.Blue);
-            Driver driver3 = new Driver("jan", 0, new Car(3, 4, 6, true), TeamColors.Green);
-            Driver driver4 = new Driver("willem ", 1, new Car(5, 3, 5, false), TeamColors.Yellow);
+            Driver driver1 = new Driver("piet", 0, new Car(0, 0, 0, false), TeamColors.Red);
+            Driver driver2 = new Driver("henk", 1, new Car(0, 0, 0, false), TeamColors.Blue);
+            Driver driver3 = new Driver("jan", 0, new Car(0, 0, 0, false), TeamColors.Green);
+            Driver driver4 = new Driver("willem ", 1, new Car(0, 0, 0, false), TeamColors.Yellow);
             
             competition.Participants.Add(driver1);
             competition.Participants.Add(driver2);

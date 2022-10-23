@@ -65,11 +65,48 @@ namespace Controller
         {
             foreach (Driver driver in Data.competition.Participants)
             {
-                driver.Equipment.Performance = _random.Next(1, 6);
-                driver.Equipment.Quality = _random.Next(1, 6);
-                driver.Equipment.Performance = _random.Next(5, 11);
+                driver.Equipment.Performance = _random.Next(2, 6);
+                driver.Equipment.Speed = _random.Next(3, 11);
+                driver.Equipment.Quality = _random.Next(20, 41);
             }
         }
+
+        public void SloopEquipment()
+        {
+            foreach (IParticipant participant in Participants)
+            {
+                if(_random.Next(1, participant.Equipment.Quality) == 1)
+                {
+                    participant.Equipment.IsBroken = true;
+                    if (participant.Equipment.Quality > 20)
+                    {
+                        participant.Equipment.Quality--; ;
+                    }
+                    
+                    if (participant.Equipment.Speed > 3)
+                    {
+                        participant.Equipment.Speed--;
+                    }
+                }
+
+            }
+        }
+
+        public void FixEquipment()
+        {
+            foreach (IParticipant participant in Participants)
+            {
+                if (participant.Equipment.IsBroken)
+                {
+                    if (_random.Next(1, 5) == 1)
+                    {
+                        participant.Equipment.IsBroken = false;
+                    }
+                }
+            }
+        }
+
+
 
         public void startRace()
         {
@@ -94,6 +131,8 @@ namespace Controller
         {
             Drive();
             DriversChanged.Invoke(this, new DriversChangedEventArgs() { Track = this.Track });
+            SloopEquipment();
+            FixEquipment();
             if (CheckIfRaceDone()){
                 RaceFinished?.Invoke(this, new EventArgs());
             }
@@ -120,7 +159,7 @@ namespace Controller
                 }
                     if (currentsectiondata.Left is null)
                     {
-                        if (prevsectiondata.Left is not null)
+                        if (prevsectiondata.Left is not null && !prevsectiondata.Left.Equipment.IsBroken)
                         {
                             prevsectiondata.Left.Location = prevsectiondata.Left.Location + prevsectiondata.Left.Equipment.Performance * prevsectiondata.Left.Equipment.Speed;
                             if (prevsectiondata.Left.Location >= 50)
@@ -140,7 +179,7 @@ namespace Controller
 
                         }
                         }
-                        if (prevsectiondata.Right is not null && currentsectiondata.Left is null)
+                        if (prevsectiondata.Right is not null && currentsectiondata.Left is null && !prevsectiondata.Right.Equipment.IsBroken)
                         {
                             prevsectiondata.Right.Location = prevsectiondata.Right.Location + prevsectiondata.Right.Equipment.Performance * prevsectiondata.Right.Equipment.Speed;
                             if (prevsectiondata.Right.Location >= 50)
@@ -163,7 +202,7 @@ namespace Controller
 
                     if (currentsectiondata.Right is null)
                     {
-                        if (prevsectiondata.Left is not null)
+                        if (prevsectiondata.Left is not null && !prevsectiondata.Left.Equipment.IsBroken)
                         {
                             prevsectiondata.Left.Location = prevsectiondata.Left.Location + prevsectiondata.Left.Equipment.Performance * prevsectiondata.Left.Equipment.Speed;
                             if (prevsectiondata.Left.Location >= 50)
@@ -182,7 +221,7 @@ namespace Controller
                             }
                         }
                         }
-                        else if (prevsectiondata.Right is not null && currentsectiondata.Right is null)
+                        else if (prevsectiondata.Right is not null && currentsectiondata.Right is null && !prevsectiondata.Right.Equipment.IsBroken)
                         {
                             prevsectiondata.Right.Location = prevsectiondata.Right.Location + prevsectiondata.Right.Equipment.Performance * prevsectiondata.Right.Equipment.Speed;
                             if (prevsectiondata.Right.Location >= 50)
